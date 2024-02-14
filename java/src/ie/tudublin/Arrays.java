@@ -101,6 +101,14 @@ public class Arrays extends PApplet
 		switch(mode)
 		{
 			case 0:
+				background(0);
+				//display message for options
+				fill(255);
+				textSize(20);
+				textAlign(CENTER, CENTER);
+				text("Press 1 for Bar Chart", 250, 200);
+				text("Press 2 for Line Chart", 250, 250);
+				text("Press 3 for Pie Chart", 250, 300);
 			break;
 
 			case 1: //first mode
@@ -110,6 +118,7 @@ public class Arrays extends PApplet
 				stroke(0, 0, 255);
 				line(50, 50, 50, 450);
 				line(50, 450, 450, 450);
+				textSize(15);
 				
 				//draw graph labels to the left of the y axis with the rainfall values from 0 to 120 increasing in 10s
 				for(int i = 0 ; i <= 120 ;  i += 10)
@@ -118,6 +127,8 @@ public class Arrays extends PApplet
 					float y = map1(i, 0, 120, 450, 50); // maps the rainfall values to the height of the graph
 					textAlign(RIGHT, CENTER); // sets the alignment of the text
 					text(i, 40, y); // draws the rainfall values to the left of the y axis
+					stroke(0,0,255);
+					line(45, y, 50, y);
 				}
 
 				//draw the graph
@@ -153,6 +164,8 @@ public class Arrays extends PApplet
 					float y = map1(i, 0, 120, 450, 50); // maps the rainfall values to the height of the graph
 					textAlign(RIGHT, CENTER); // sets the alignment of the text
 					text(i, 40, y); // draws the rainfall values to the left of the y axis
+					stroke(0,0,255);
+					line(45, y, 50, y);
 				}
 
 				//draw trend lines and months underneath the x axis
@@ -165,7 +178,7 @@ public class Arrays extends PApplet
 					float y2 = map1(rainfall[i], 0, 120, 0, 400); // maps the next rainfall value to the height of the graph
 
 
-					stroke(0, 255, 255); // sets the colour of the trend lines
+					stroke(0, 0, 255); // sets the colour of the trend lines
 					line(x1 + w1 * 0.5f, 450 - y1, x2 + w1 * 0.5f, 450 - y2); // draws the trend lines
 					fill(0,0,255); // sets the colour of the text
 					textAlign(CENTER, CENTER); // sets the alignment of the text
@@ -175,6 +188,42 @@ public class Arrays extends PApplet
 						text(months[i], x2 + w1 * 0.5f, 460); // draws the months underneath the x axis
 					}
 				}
+			break;
+			case 3:
+				background(0);
+
+				//draw cirlce for pichart
+				float total = 0;
+				for (int i = 0; i < rainfall.length; i++)
+				{
+					total += rainfall[i];
+				}
+
+				float x = 250;
+				float y = 250;
+				float radius = 200;
+				float lastAngle = 0;
+				for (int i = 0; i < rainfall.length; i++)
+				{
+					float angle = map1(rainfall[i], 0, total, 0, TWO_PI); // maps the rainfall values to the angle of the circle segments 
+					fill(map1(i, 0, rainfall.length, 0, 255), 255, 255); // sets the colour of the segments of the circle to a hue value
+					arc(x, y, radius * 2, radius * 2, lastAngle, lastAngle + angle); // draws the segments of the circle with the rainfall values
+					lastAngle += angle; // increments the angle
+				}
+
+				//print the months outside the circle
+				for (int i = 0; i < rainfall.length; i++)
+				{
+					float angle = map1(rainfall[i], 0, total, 0, TWO_PI); // maps the rainfall values to the angle of the circle segments
+					float midAngle = lastAngle + angle * 0.5f; // calculates the middle angle of the circle segments
+					float x1 = x + cos(midAngle) * 450 * 0.5f; // calculates the x position of the text
+					float y1 = y + sin(midAngle) * 450 * 0.5f; // calculates the y position of the text
+					fill(0,0,255); // sets the colour of the text
+					textAlign(CENTER, CENTER); // sets the alignment of the text
+					text(months[i], x1, y1); // draws the months outside the circle
+					lastAngle += angle; // increments the angle
+				}
+				
 			break;
 				
 		}
